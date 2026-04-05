@@ -1,0 +1,18 @@
+# Copy this file to application.properties and fill in your values
+
+spring.application.name=repo-radar
+
+# Database
+spring.datasource.url=jdbc:mysql://localhost:3306/repo_radar
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+
+# Hibernate - validates schema on startup, does not modify it
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.show-sql=false
+
+# Server
+server.port=8080
+
+# Thymeleaf
+spring.thymeleaf.cache=false
