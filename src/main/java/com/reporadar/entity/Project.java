@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity //le decimos a JPA que esta clase representa una tabla de nuestra bd
+@Entity//le decimos a JPA que esta clase representa una tabla de nuestra bd
 @Table(name="project")//le decimos el nombre exacto de la tabla
 
 public class Project {

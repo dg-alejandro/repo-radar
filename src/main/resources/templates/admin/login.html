@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Repo Radar · Acceso</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #f0efeb;
+      --white:    #ffffff;
+      --ink:      #111110;
+      --ink-2:    #4a4945;
+      --ink-3:    #9a9990;
+      --rule:     #e0ddd6;
+      --accent:   #3d6b4f;
+      --accent-l: #eaf2ed;
+      --err:      #7a2323;
+      --err-l:    #fdf1f1;
+      --err-r:    #e5c0c0;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    /* ── card ── */
+    .card {
+      width: 100%;
+      max-width: 380px;
+      background: var(--white);
+      border: 1px solid var(--rule);
+      padding: 40px 36px 36px;
+    }
+
+    /* ── header ── */
+    .card-header {
+      margin-bottom: 32px;
+    }
+
+    .wordmark {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--ink);
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+
+    .card-sub {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--ink-3);
+    }
+
+    /* ── error ── */
+    .alert {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background: var(--err-l);
+      border: 1px solid var(--err-r);
+      border-left: 3px solid var(--err);
+      padding: 10px 13px;
+      margin-bottom: 24px;
+    }
+
+    .alert-icon {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--err);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .alert-text {
+      font-size: 12px;
+      color: var(--err);
+      line-height: 1.55;
+    }
+
+    /* ── form ── */
+    .field {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--ink-2);
+      margin-bottom: 6px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      height: 38px;
+      padding: 0 12px;
+      background: var(--bg);
+      border: 1px solid var(--rule);
+      border-radius: 0;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--ink);
+      outline: none;
+      transition: border-color .12s, box-shadow .12s;
+      -webkit-appearance: none;
+    }
+
+    input::placeholder { color: var(--ink-3); }
+
+    input:focus {
+      border-color: var(--accent);
+      background: var(--white);
+      box-shadow: 0 0 0 3px var(--accent-l);
+    }
+
+    /* ── submit ── */
+    .btn-submit {
+      width: 100%;
+      height: 38px;
+      margin-top: 8px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 0;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: .03em;
+      cursor: pointer;
+      transition: opacity .12s;
+    }
+
+    .btn-submit:hover  { opacity: .88; }
+    .btn-submit:active { opacity: .72; }
+
+    /* ── footer ── */
+    .card-footer {
+      margin-top: 36px;
+      padding-top: 0;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--ink-3);
+      letter-spacing: .03em;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <div class="card-header">
+    <span class="wordmark">repo_radar</span>
+    <h1 class="card-title">Acceso al panel</h1>
+  </div>
+
+  <!--error visible solo cuando la URL contiene ?error -->
+  <div class="alert" th:if="${param.error}">
+    
+    <span class="alert-text">
+      Credenciales incorrectas.<br/>
+      Comprueba el email y la contraseña.
+    </span>
+  </div>
+
+  <form th:action="@{/admin/login}" method="post">
+
+    <div class="field">
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="admin@reporadar.com"
+        autocomplete="email"
+        required
+      />
+    </div>
+
+    <div class="field">
+      <label for="password">Contraseña</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="••••••••"
+        autocomplete="current-password"
+        required
+      />
+    </div>
+
+    <button type="submit" class="btn-submit">Entrar</button>
+
+  </form>
+
+  <div class="card-footer">
+    repo_radar
+  </div>
+
+</div>
+
+</body>
+</html>

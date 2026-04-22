@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repo Radar · Importar proyecto</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+          --bg:       #f0efeb;
+          --white:    #ffffff;
+          --ink:      #111110;
+          --ink-2:    #4a4945;
+          --ink-3:    #9a9990;
+          --rule:     #e0ddd6;
+          --accent:   #3d6b4f;
+          --accent-l: #eaf2ed;
+          --err:      #7a2323;
+          --err-l:    #fdf1f1;
+          --err-r:    #e5c0c0;
+          --ok:       #2a5c3f;
+          --ok-l:     #eaf2ed;
+          --ok-r:     #b6d9c3;
+        }
+
+        html, body {
+          height: 100%;
+          background: var(--bg);
+          color: var(--ink);
+          font-family: 'Poppins', sans-serif;
+          font-size: 14px;
+          line-height: 1.5;
+          -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-height: 100vh;
+        }
+
+        .card {
+          width: 100%;
+          max-width: 420px;
+          background: var(--white);
+          border: 1px solid var(--rule);
+          padding: 40px 36px 36px;
+        }
+
+        .card-header { margin-bottom: 32px; }
+
+        .wordmark {
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: .08em;
+          text-transform: uppercase;
+          color: var(--accent);
+          margin-bottom: 16px;
+          display: block;
+        }
+
+        .card-title {
+          font-size: 20px;
+          font-weight: 500;
+          color: var(--ink);
+          line-height: 1.25;
+          margin-bottom: 4px;
+        }
+
+        .card-sub {
+          font-size: 13px;
+          font-weight: 300;
+          color: var(--ink-3);
+        }
+
+        .alert {
+          display: flex;
+          gap: 10px;
+          align-items: flex-start;
+          border-left: 3px solid;
+          padding: 10px 13px;
+          margin-bottom: 24px;
+          font-size: 12px;
+          line-height: 1.55;
+        }
+
+        .alert-error {
+          background: var(--err-l);
+          border-color: var(--err);
+          border: 1px solid var(--err-r);
+          border-left: 3px solid var(--err);
+          color: var(--err);
+        }
+
+        .alert-success {
+          background: var(--ok-l);
+          border: 1px solid var(--ok-r);
+          border-left: 3px solid var(--ok);
+          color: var(--ok);
+        }
+
+        .field { margin-bottom: 18px; }
+
+        label {
+          display: block;
+          font-size: 11px;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: .07em;
+          color: var(--ink-2);
+          margin-bottom: 6px;
+        }
+
+        input[type="text"] {
+          width: 100%;
+          height: 38px;
+          padding: 0 12px;
+          background: var(--bg);
+          border: 1px solid var(--rule);
+          font-family: 'Poppins', sans-serif;
+          font-size: 13px;
+          color: var(--ink);
+          outline: none;
+          transition: border-color .12s, box-shadow .12s;
+          -webkit-appearance: none;
+        }
+
+        input::placeholder { color: var(--ink-3); }
+
+        input:focus {
+          border-color: var(--accent);
+          background: var(--white);
+          box-shadow: 0 0 0 3px var(--accent-l);
+        }
+
+        .btn-submit {
+          width: 100%;
+          height: 38px;
+          margin-top: 8px;
+          background: var(--accent);
+          color: #fff;
+          border: none;
+          font-family: 'Poppins', sans-serif;
+          font-size: 13px;
+          font-weight: 500;
+          letter-spacing: .03em;
+          cursor: pointer;
+          transition: opacity .12s;
+        }
+
+        .btn-submit:hover  { opacity: .88; }
+        .btn-submit:active { opacity: .72; }
+
+        .card-footer {
+          margin-top: 28px;
+          text-align: center;
+        }
+
+        .back-link {
+          font-size: 12px;
+          font-weight: 400;
+          color: var(--ink-3);
+          text-decoration: none;
+          transition: color .12s;
+        }
+
+        .back-link:hover { color: var(--accent); }
+    </style>
+</head>
+<body>
+
+<div class="card">
+
+    <div class="card-header">
+        <span class="wordmark">repo_radar</span>
+        <h1 class="card-title">Importar proyecto</h1>
+        <p class="card-sub">Introduce la URL del repositorio de GitHub.</p>
+    </div>
+
+    <div class="alert alert-error" th:if="${error}">
+        <span th:text="${error}"></span>
+    </div>
+
+    <div class="alert alert-success" th:if="${success}">
+        <span th:text="${success}"></span>
+    </div>
+
+    <form th:action="@{/admin/projects/import}" method="post">
+
+        <div class="field">
+            <label for="url">URL del repositorio</label>
+            <input
+                    type="text"
+                    id="url"
+                    name="url"
+                    placeholder="https://github.com/usuario/repositorio"
+                    required
+            />
+        </div>
+
+        <button type="submit" class="btn-submit">Importar</button>
+
+    </form>
+
+    <div class="card-footer">
+        <a th:href="@{/admin/projects}" class="back-link">← Volver al listado</a>
+    </div>
+
+</div>
+
+</body>
+</html>

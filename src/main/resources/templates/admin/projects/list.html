@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repo Radar · Proyectos</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+          --bg:       #f0efeb;
+          --white:    #ffffff;
+          --ink:      #111110;
+          --ink-2:    #4a4945;
+          --ink-3:    #9a9990;
+          --rule:     #e0ddd6;
+          --accent:   #3d6b4f;
+          --accent-l: #eaf2ed;
+          --err:      #7a2323;
+          --err-l:    #fdf1f1;
+          --err-r:    #e5c0c0;
+          --ok:       #2a5c3f;
+          --ok-l:     #eaf2ed;
+          --ok-r:     #b6d9c3;
+        }
+
+        html, body {
+          min-height: 100%;
+          background: var(--bg);
+          color: var(--ink);
+          font-family: 'Poppins', sans-serif;
+          font-size: 14px;
+          line-height: 1.5;
+          -webkit-font-smoothing: antialiased;
+        }
+
+        .page {
+          max-width: 1100px;
+          margin: 0 auto;
+          padding: 48px 32px;
+        }
+
+        .topbar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 36px;
+        }
+
+        .wordmark {
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: .08em;
+          text-transform: uppercase;
+          color: var(--accent);
+        }
+
+        .page-title {
+          font-size: 20px;
+          font-weight: 500;
+          color: var(--ink);
+        }
+
+        .btn-primary {
+          height: 36px;
+          padding: 0 18px;
+          background: var(--accent);
+          color: #fff;
+          border: none;
+          font-family: 'Poppins', sans-serif;
+          font-size: 12px;
+          font-weight: 500;
+          letter-spacing: .03em;
+          cursor: pointer;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          transition: opacity .12s;
+        }
+
+        .btn-primary:hover  { opacity: .88; }
+        .btn-primary:active { opacity: .72; }
+
+        .alert {
+          padding: 10px 14px;
+          margin-bottom: 24px;
+          font-size: 12px;
+          line-height: 1.55;
+        }
+
+        .alert-error {
+          background: var(--err-l);
+          border: 1px solid var(--err-r);
+          border-left: 3px solid var(--err);
+          color: var(--err);
+        }
+
+        .alert-success {
+          background: var(--ok-l);
+          border: 1px solid var(--ok-r);
+          border-left: 3px solid var(--ok);
+          color: var(--ok);
+        }
+
+        .table-wrap {
+          background: var(--white);
+          border: 1px solid var(--rule);
+          overflow-x: auto;
+        }
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+
+        thead th {
+          padding: 12px 16px;
+          font-size: 11px;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: .07em;
+          color: var(--ink-3);
+          text-align: left;
+          border-bottom: 1px solid var(--rule);
+          white-space: nowrap;
+        }
+
+        tbody td {
+          padding: 13px 16px;
+          font-size: 13px;
+          color: var(--ink-2);
+          border-bottom: 1px solid var(--rule);
+          vertical-align: middle;
+        }
+
+        tbody tr:last-child td { border-bottom: none; }
+
+        tbody tr:hover td { background: #faf9f7; }
+
+        .td-name {
+          font-weight: 500;
+          color: var(--ink);
+          max-width: 260px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .badge {
+          display: inline-block;
+          padding: 2px 9px;
+          font-size: 11px;
+          font-weight: 500;
+          letter-spacing: .04em;
+          text-transform: uppercase;
+        }
+
+        .badge-published {
+          background: var(--ok-l);
+          color: var(--ok);
+        }
+
+        .badge-hidden {
+          background: #f3f2ef;
+          color: var(--ink-3);
+        }
+
+        .empty {
+          padding: 48px 16px;
+          text-align: center;
+          font-size: 13px;
+          font-weight: 300;
+          color: var(--ink-3);
+        }
+
+        .page-footer {
+          margin-top: 32px;
+          font-size: 11px;
+          font-weight: 300;
+          color: var(--ink-3);
+          letter-spacing: .03em;
+          text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page">
+
+    <div class="topbar">
+        <div>
+            <span class="wordmark">repo_radar</span>
+            <h1 class="page-title">Proyectos</h1>
+        </div>
+        <a th:href="@{/admin/projects/import}" class="btn-primary">+ Importar</a>
+    </div>
+
+    <div class="alert alert-error"   th:if="${error}"   th:text="${error}"></div>
+    <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Autor</th>
+                <th>Stars</th>
+                <th>Tecnología</th>
+                <th>Estado</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:if="${#lists.isEmpty(projects)}">
+                <td colspan="5" class="empty">No hay proyectos todavía. Importa el primero.</td>
+            </tr>
+
+            <tr th:each="project : ${projects}">
+                <td class="td-name" th:text="${project.name}"></td>
+                <td th:text="${project.author}"></td>
+                <td th:text="${project.stars}"></td>
+                <td th:text="${!project.technologies.isEmpty()} ? ${project.technologies.iterator().next().name} : '—'"></td>
+                <td>
+            <span class="badge"
+                  th:classappend="${project.status.name() == 'PUBLISHED'} ? 'badge-published' : 'badge-hidden'"
+                  th:text="${project.status.name() == 'PUBLISHED'} ? 'Publicado' : 'Oculto'">
+            </span>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="page-footer">repo_radar</div>
+
+</div>
+
+</body>
+</html>
