@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repo Radar · Editar proyecto</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:       #f0efeb;
+            --white:    #ffffff;
+            --ink:      #111110;
+            --ink-2:    #4a4945;
+            --ink-3:    #9a9990;
+            --rule:     #e0ddd6;
+            --accent:   #3d6b4f;
+            --accent-l: #eaf2ed;
+            --err:      #7a2323;
+            --err-l:    #fdf1f1;
+            --err-r:    #e5c0c0;
+            --ok:       #2a5c3f;
+            --ok-l:     #eaf2ed;
+            --ok-r:     #b6d9c3;
+        }
+
+        html, body {
+            min-height: 100%;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .page {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 48px 32px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 36px;
+        }
+
+        .wordmark {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        .btn-primary {
+            height: 36px;
+            padding: 0 18px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: .03em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: opacity .12s;
+        }
+
+        .btn-primary:hover  { opacity: .88; }
+        .btn-primary:active { opacity: .72; }
+
+        .btn-secondary {
+            height: 36px;
+            padding: 0 18px;
+            background: transparent;
+            color: var(--ink-2);
+            border: 1px solid var(--rule);
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: .03em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: background .12s;
+        }
+
+        .btn-secondary:hover { background: #e8e6e0; }
+
+        .alert {
+            padding: 10px 14px;
+            margin-bottom: 24px;
+            font-size: 12px;
+            line-height: 1.55;
+        }
+
+        .alert-error {
+            background: var(--err-l);
+            border: 1px solid var(--err-r);
+            border-left: 3px solid var(--err);
+            color: var(--err);
+        }
+
+        .alert-success {
+            background: var(--ok-l);
+            border: 1px solid var(--ok-r);
+            border-left: 3px solid var(--ok);
+            color: var(--ok);
+        }
+
+        /* Info de solo lectura */
+        .info-card {
+            background: var(--white);
+            border: 1px solid var(--rule);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+
+        .info-card-title {
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            color: var(--ink-3);
+            margin-bottom: 14px;
+        }
+
+        .info-row {
+            display: flex;
+            gap: 8px;
+            font-size: 13px;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .info-row:last-child { border-bottom: none; }
+
+        .info-label {
+            width: 100px;
+            flex-shrink: 0;
+            color: var(--ink-3);
+            font-weight: 400;
+        }
+
+        .info-value {
+            color: var(--ink-2);
+            word-break: break-all;
+        }
+
+        .info-value a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .info-value a:hover { text-decoration: underline; }
+
+        /* Formulario */
+        .form-card {
+            background: var(--white);
+            border: 1px solid var(--rule);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+
+        .form-section-title {
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            color: var(--ink-3);
+            margin-bottom: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group:last-child { margin-bottom: 0; }
+
+        label.field-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--ink-2);
+            margin-bottom: 8px;
+        }
+
+        select {
+            height: 36px;
+            padding: 0 10px;
+            background: var(--bg);
+            border: 1px solid var(--rule);
+            font-family: 'Poppins', sans-serif;
+            font-size: 13px;
+            color: var(--ink);
+            outline: none;
+            cursor: pointer;
+        }
+
+        select:focus { border-color: var(--accent); }
+
+        /* Checkboxes */
+        .checkbox-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            background: var(--bg);
+            border: 1px solid var(--rule);
+            cursor: pointer;
+            font-size: 12px;
+            color: var(--ink-2);
+            transition: background .1s, border-color .1s;
+        }
+
+        .checkbox-item:has(input:checked) {
+            background: var(--accent-l);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
+        /* Acciones */
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .page-footer {
+            margin-top: 32px;
+            font-size: 11px;
+            font-weight: 300;
+            color: var(--ink-3);
+            letter-spacing: .03em;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page">
+
+    <div class="topbar">
+        <div>
+            <span class="wordmark">repo_radar</span>
+            <h1 class="page-title">Editar proyecto</h1>
+        </div>
+        <a th:href="@{/admin/projects}" class="btn-secondary">← Volver</a>
+    </div>
+
+    <div class="alert alert-error"   th:if="${error}"   th:text="${error}"></div>
+    <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+
+    <div class="info-card">
+        <div class="info-card-title">Datos del repositorio</div>
+        <div class="info-row">
+            <span class="info-label">Nombre</span>
+            <span class="info-value" th:text="${project.name}"></span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Descripción</span>
+            <span class="info-value" th:text="${project.description ?: '—'}"></span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">URL</span>
+            <span class="info-value">
+                <a th:href="${project.repositoryUrl}" th:text="${project.repositoryUrl}" target="_blank"></a>
+            </span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Autor</span>
+            <span class="info-value" th:text="${project.author ?: '—'}"></span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Stars</span>
+            <span class="info-value" th:text="${project.stars}"></span>
+        </div>
+    </div>
+
+
+    <form th:action="@{/admin/projects/{id}/edit(id=${project.id})}" method="post">
+
+        <div class="form-card">
+            <div class="form-section-title">Configuración</div>
+
+            <div class="form-group">
+                <label class="field-label" for="status">Estado</label>
+                <select id="status" name="status">
+                    <option th:each="s : ${statuses}"
+                            th:value="${s}"
+                            th:text="${s.name() == 'PUBLISHED'} ? 'Publicado' : 'Oculto'"
+                            th:selected="${s == project.status}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="field-label">Categorías</label>
+                <div class="checkbox-grid">
+                    <label class="checkbox-item" th:each="cat : ${allCategories}">
+                        <input type="checkbox"
+                               name="categoryIds"
+                               th:value="${cat.id}"
+                               th:checked="${project.categories.contains(cat)}">
+                        <span th:text="${cat.name}"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="field-label">Tecnologías</label>
+                <div class="checkbox-grid">
+                    <label class="checkbox-item" th:each="tech : ${allTechnologies}">
+                        <input type="checkbox"
+                               name="technologyIds"
+                               th:value="${tech.id}"
+                               th:checked="${project.technologies.contains(tech)}">
+                        <span th:text="${tech.name}"></span>
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Guardar cambios</button>
+            <a th:href="@{/admin/projects}" class="btn-secondary">Cancelar</a>
+        </div>
+
+    </form>
+
+    <div class="page-footer">repo_radar</div>
+
+</div>
+
+</body>
+</html>

@@ -168,6 +168,16 @@
           color: var(--ink-3);
         }
 
+        .btn-edit {
+          font-size: 12px;
+          font-weight: 500;
+          color: var(--accent);
+          text-decoration: none;
+          letter-spacing: .03em;
+        }
+
+        .btn-edit:hover { text-decoration: underline; }
+
         .empty {
           padding: 48px 16px;
           text-align: center;
@@ -208,26 +218,42 @@
                 <th>Nombre</th>
                 <th>Autor</th>
                 <th>Stars</th>
-                <th>Tecnología</th>
+                <th>Tecnologías</th>
+                <th>Categorías</th>
                 <th>Estado</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
 
             <tr th:if="${#lists.isEmpty(projects)}">
-                <td colspan="5" class="empty">No hay proyectos todavía. Importa el primero.</td>
+                <td colspan="7" class="empty">No hay proyectos todavía. Importa el primero.</td>
             </tr>
 
             <tr th:each="project : ${projects}">
                 <td class="td-name" th:text="${project.name}"></td>
                 <td th:text="${project.author}"></td>
                 <td th:text="${project.stars}"></td>
-                <td th:text="${!project.technologies.isEmpty()} ? ${project.technologies.iterator().next().name} : '—'"></td>
                 <td>
-            <span class="badge"
-                  th:classappend="${project.status.name() == 'PUBLISHED'} ? 'badge-published' : 'badge-hidden'"
-                  th:text="${project.status.name() == 'PUBLISHED'} ? 'Publicado' : 'Oculto'">
-            </span>
+        <span th:if="${!project.technologies.isEmpty()}"
+              th:each="tech, iter : ${project.technologies}"
+              th:text="${tech.name + (!iter.last ? ', ' : '')}"></span>
+                    <span th:if="${project.technologies.isEmpty()}">—</span>
+                </td>
+                <td>
+        <span th:if="${!project.categories.isEmpty()}"
+              th:each="cat, iter : ${project.categories}"
+              th:text="${cat.name + (!iter.last ? ', ' : '')}"></span>
+                    <span th:if="${project.categories.isEmpty()}">—</span>
+                </td>
+                <td>
+        <span class="badge"
+              th:classappend="${project.status.name() == 'PUBLISHED'} ? 'badge-published' : 'badge-hidden'"
+              th:text="${project.status.name() == 'PUBLISHED'} ? 'Publicado' : 'Oculto'">
+        </span>
+                </td>
+                <td>
+                    <a th:href="@{/admin/projects/{id}/edit(id=${project.id})}" class="btn-edit">Editar</a>
                 </td>
             </tr>
 

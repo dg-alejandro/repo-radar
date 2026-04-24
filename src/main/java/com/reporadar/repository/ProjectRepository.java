@@ -20,7 +20,7 @@ public interface ProjectRepository extends JpaRepository<Project,Long> { //al ex
 
     Page<Project> findByStatus(ProjectStatus status, Pageable pageable);//en lugar de List<Project>, usamos Page<Project> junto con Pageable para paginar los resultados
                                                                         //sin paginación, una consulta podría devolver miles de filas de golpe(no en este caso, pero es lo mismo), lo que es lento e ineficiente
-                                                                        //Pageable define qué trozo de resultados queremos: qué página y cuántos elementos por página
+                                                                        //Pageable define qué trozo de resultados queremos: qué página y cuántos elementos por páginag
                                                                         //Page<Project> devuelve ese trozo junto con mas información: total de resultados, total de páginas, y si hay página siguiente
 
     Page<Project> findByStatusAndCategoriesId(ProjectStatus status, Pageable pageable, Long categoryId);

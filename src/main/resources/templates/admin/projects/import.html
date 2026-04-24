@@ -179,7 +179,7 @@
     <div class="card-header">
         <span class="wordmark">repo_radar</span>
         <h1 class="card-title">Importar proyecto</h1>
-        <p class="card-sub">Introduce la URL del repositorio de GitHub.</p>
+        <p class="card-sub">Introduce la URL del repositorio a importar.</p>
     </div>
 
     <div class="alert alert-error" th:if="${error}">
@@ -192,6 +192,17 @@
 
     <form th:action="@{/admin/projects/import}" method="post">
 
+        <div class="field">
+            <label for="source">Fuente</label>
+            <select id="source" name="source" required
+                    style="width:100%; height:38px; padding:0 12px; background:var(--bg);
+                   border:1px solid var(--rule); font-family:'Poppins',sans-serif;
+                   font-size:13px; color:var(--ink); outline:none;
+                   -webkit-appearance:none; appearance:none;">
+                <option value="github">GitHub</option>
+                <option value="gitlab">GitLab</option>
+            </select>
+        </div>
         <div class="field">
             <label for="url">URL del repositorio</label>
             <input
