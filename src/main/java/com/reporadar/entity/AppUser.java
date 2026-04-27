@@ -22,6 +22,8 @@ public class AppUser {
     @Column(name="password", nullable=false, length=255)
     private String password;
 
+    private String passwordHash;
+
     @Column(name="registered_at", nullable=false)
     private LocalDateTime registeredAt;
 
@@ -61,4 +63,12 @@ public class AppUser {
     //registeredAt no tiene setter pues esta fecha no se debe de poder modificar
 
     public Set<Project> getFavorites() {return favorites;}
+
+    public String getPasswordHash(){
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash){
+        this.passwordHash=passwordHash;
+    }
 }

@@ -1,4 +1,4 @@
-package com.reporadar.service.github;
+package com.reporadar.service;
 
 import com.reporadar.entity.Administrator;
 import com.reporadar.entity.Project;
