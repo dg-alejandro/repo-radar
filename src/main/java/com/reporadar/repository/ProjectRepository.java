@@ -5,6 +5,8 @@ import com.reporadar.entity.ProjectStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -38,4 +40,27 @@ public interface ProjectRepository extends JpaRepository<Project,Long> { //al ex
             Pageable pageable);
 
     Optional<Project> findByIdAndStatus(Long id, ProjectStatus status);//para buscar proyectos por id
+
+    //busca proyectos aplicando los tres filtros a la vez. Cada filtro es opcional:
+    //si llega null, se ignora gracias al patron (:param IS NULL OR <condicion>).
+    //Usamos LEFT JOIN para que un proyecto sin categorias o tecnologias siga apareciendo
+    //cuando esos filtros no se aplican, y DISTINCT para evitar filas duplicadas
+    //cuando un proyecto tiene varias categorias o tecnologias.
+    @Query("""
+            SELECT DISTINCT p FROM Project p
+            LEFT JOIN p.categories c
+            LEFT JOIN p.technologies t
+            WHERE p.status = :status
+              AND (:q IS NULL
+                   OR LOWER(p.name) LIKE LOWER(CONCAT('%', :q, '%'))
+                   OR LOWER(p.description) LIKE LOWER(CONCAT('%', :q, '%')))
+              AND (:categoryId IS NULL OR c.id = :categoryId)
+              AND (:technologyId IS NULL OR t.id = :technologyId)
+            """)
+    Page<Project> searchPublished(
+            @Param("status") ProjectStatus status,
+            @Param("q") String q,
+            @Param("categoryId") Long categoryId,
+            @Param("technologyId") Long technologyId,
+            Pageable pageable);
 }
