@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    El backend de repo_radar corre en local sin HTTPS (decision tecnica
+    documentada en decisiones_tecnicas). Permitimos cleartext solo para los
+    hosts esperados: 10.0.2.2 (alias del emulador para localhost del PC) y
+    localhost.
+
+    Si pruebas con un movil real, anade la IP local del PC como otro <domain>.
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">10.0.2.2</domain>
+        <domain includeSubdomains="true">localhost</domain>
+    </domain-config>
+</network-security-config>
