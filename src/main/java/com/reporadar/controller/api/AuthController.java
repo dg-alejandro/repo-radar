@@ -24,7 +24,7 @@ public class AuthController {
     //este metodo devolvera un reponseEntity, que permite configurar el codigo de estado y el cuerpo de la respuesta(un mapa, que sera un JSON)
     //con @RequestBody tomamos el json que envia el cliente y lo convertimos automaticamente en un mapa de java
     public ResponseEntity<Map<String, String>> register(@RequestBody Map<String, String> body) {
-        String token = authService.register(body.get("email"), body.get("password"));
+        String token = authService.register(body.get("email"), body.get("password"), body.get("name"));
         return ResponseEntity.ok(Map.of("token", token));
     }
 

@@ -20,8 +20,7 @@ import java.util.Map;
 @Service//esto le dice a spring que esta clase es un componente de la capa de logica de negocio, pudiendose inyectar donde se necesite
 public class GitHubImportService {
 
-    private final RestTemplate restTemplate;//es el cliente http de spring, permite hacer peticiones GET,POST,etc a
-                                            //urls externas
+    private final RestTemplate restTemplate;//es el cliente http de spring, permite hacer peticiones GET,POST,etc a urls externas
 
     //usamos los repositorios porque despues de obtener datos desde github, se persisten en base de datos. Necesitamos
     //el de project para guardar el proyecto, technology para buscar o crear la tecnologia, y administrator
@@ -42,6 +41,7 @@ public class GitHubImportService {
 
     private static final String API_BASE="https://api.github.com/repos/";//constante con la url base de la api de github
                                                                          //todos los repos siguen el mismo patron
+
     //punto de entrada del servicio
     public Project importFromUrl(String repoUrl, Long administratorId){
         Map<String,Object> data=fetchRepoData(repoUrl);//llama a la api y devuelve los datos de repo como mapa(clave-valor)
@@ -91,7 +91,7 @@ public class GitHubImportService {
         project.setAuthor(author);
         project.setStars(stars);
         project.setImportDate(LocalDateTime.now());//cogemos la fecha en el momento de la importacion
-        project.setStatus(ProjectStatus.HIDDEN);//todo proyecto comienza estando oculto, es el administrador el que lo vuelve visible
+        project.setStatus(ProjectStatus.HIDDEN);//todos los proyectos comienzan estando ocultos, es el administrador el que lo vuelve visible
         project.setAdministrator(administrator);
 
         //primero comprobamos que el lenguaje no sea null ni una cadena vacia(usamos is blank porque tambien detecta espacios)

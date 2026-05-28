@@ -20,13 +20,19 @@ public class AdminInitializer {
 
     @PostConstruct
     public void init() {
-        if (administratorRepository.count() == 0) {
-            Administrator admin = new Administrator();
-            admin.setName("Admin");
-            admin.setEmail("admin@reporadar.com");
-            admin.setPassword(passwordEncoder.encode("admin123"));
-            administratorRepository.save(admin);
-            System.out.println(">>> Admin creado correctamente");
+        if (administratorRepository.findByEmail("admin@prueba.es").isEmpty()) {
+            try {
+                Administrator admin = new Administrator();
+                admin.setName("Admin");
+                admin.setEmail("admin@prueba.es");
+                admin.setPassword(passwordEncoder.encode("1234"));
+                administratorRepository.save(admin);
+                System.out.println(">>> Admin creado correctamente");
+            } catch (Exception e) {
+                System.out.println(">>> Error al crear admin: " + e.getMessage());
+            }
+        } else {
+            System.out.println(">>> Admin ya existe");
         }
     }
 }

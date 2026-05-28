@@ -6,7 +6,9 @@ import java.util.List;
 
 //un dto(data transfer object), es un objeto que define exactamente que datos se envian entre capas del
 //sistema, en este caso, de backend a cliente.(en el caso especifico de projects, el usuario no tiene que ver
-//el estado de proyecto, el id del administrador que hizo la importacion, ni fecha de actualizacion)
+//el estado de proyecto, el id del administrador que hizo la importacion, ni fecha de actualizacion, solo deberia ver)
+//la informacion importante
+
 public class ProjectResponseDTO {
 
     private Long id;
@@ -17,7 +19,7 @@ public class ProjectResponseDTO {
     private int stars;
     private LocalDateTime importDate;
     //usamos una lista con los dto de technology y category para que la app android reciba tanto el nombre
-    //como su id, muy util porque la app necesita los ids para construir filtros y hacer busquedas.
+    //como su id, muy util porque sin los ids seria dificil construir filtros y busquedas en la app movil
     private List<CategoryResponseDTO> categories;
     private List<TechnologyResponseDTO> technologies;
 

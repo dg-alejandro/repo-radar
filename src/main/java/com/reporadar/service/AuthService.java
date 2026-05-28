@@ -25,12 +25,13 @@ public class AuthService {
     }
 
     //metodo que se encarga del registro de un nuevo usuario
-    public String register(String email, String password) {
+    public String register(String email, String password, String name) {
         //revisa si el email ya esta registrado
         if (userRepository.findByEmail(email).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email ya registrado");
         }
         AppUser user = new AppUser();
+        user.setName(name);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);//creamos un nuevo usuario con su email y su contraseña hasheada
